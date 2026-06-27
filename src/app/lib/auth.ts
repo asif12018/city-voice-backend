@@ -40,6 +40,11 @@ export const auth = betterAuth({
       division:{
         type: "string",
         required: true
+      },
+      isBanned:{
+        type: "boolean",
+        required: false,
+        defaultValue: false
       }
     }
   },

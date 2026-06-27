@@ -6,6 +6,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
   id            String    @id @default(uuid())
   email         String    @unique
@@ -14,10 +19,11 @@ model User {
   updatedAt     DateTime  @updatedAt
   emailVerified Boolean   @default(false)
   image         String?
-  role          String?   @default("USER")
+  role          Role      @default(USER)
   gender        String
   district      String
   division      String
+  isBanned      Boolean? @default(false)
   sessions      Session[]
   accounts      Account[]
   issues        Issue[]
