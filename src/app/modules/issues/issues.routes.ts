@@ -1,18 +1,19 @@
 import { Router } from "express";
 import { IssuesControllers } from "./issues.controller";
 import { checkAuth } from "../../middlewares/checkAuth";
+import { Role } from "@prisma/client";
 
 const router = Router();
 
 router.post(
     "/create", 
-    checkAuth(), 
+    checkAuth(Role.ADMIN, Role.USER), 
     IssuesControllers.createIssue
 );
 
 router.get(
     "/division", 
-    checkAuth(), 
+    checkAuth(Role.ADMIN, Role.USER), 
     IssuesControllers.getIssuebyDivision
 );
 
@@ -23,7 +24,7 @@ router.get(
 
 router.delete(
     "/:id", 
-    checkAuth(), 
+    checkAuth(Role.ADMIN, Role.USER), 
     IssuesControllers.deleteIssues
 );
 
