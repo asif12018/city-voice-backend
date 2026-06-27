@@ -33,11 +33,11 @@ export const auth = betterAuth({
         type: "string",
         required: true,
       },
-      district:{
+      districtId:{
         type: "string",
         required: true
       },
-      division:{
+      divisionId:{
         type: "string",
         required: true
       },
