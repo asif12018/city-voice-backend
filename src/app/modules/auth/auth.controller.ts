@@ -16,6 +16,7 @@ import AppError from "../../../errors/AppError";
 //register a user
 const registerUser = catchAsync(async(req:Request, res:Response)=>{
     let payload = req?.body;
+    // console.log("this is payload", payload)
     const result = await AuthServices.registerUser(payload);
 
     //set access token
