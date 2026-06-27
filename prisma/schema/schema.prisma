@@ -96,7 +96,7 @@ model Division {
 
   districts District[]
   user User[]
-
+  issues Issue[]
   @@map("division")
 }
 
@@ -108,6 +108,7 @@ model District {
   divisionId String
   division   Division @relation(fields: [divisionId], references: [id], onDelete: Cascade)
    
+   issues Issue[]
    user User[]
   @@index([divisionId])
   @@map("district")
@@ -127,6 +128,11 @@ model Issue {
 
   upvotes  Upvote[]
   downvotes DownVote[]
+  divisionId String
+  division Division @relation(fields: [divisionId], references: [id], onDelete: Cascade)
+
+  districtId String
+  district District @relation(fields: [districtId], references: [id], onDelete: Cascade)
 
   @@index([authorId])
   @@map("issue")
