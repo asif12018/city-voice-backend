@@ -21,6 +21,8 @@ model User {
   sessions      Session[]
   accounts      Account[]
   issues        Issue[]
+  upvotes       Upvote[]
+  downvotes     DownVote[]
 
   @@map("user")
 }
@@ -77,22 +79,22 @@ model Verification {
 
 model Division {
   id   String @id @default(cuid())
-  name String @unique // e.g., "Dhaka", "Chattogram"
+  name String @unique 
 
-  districts District[] // One-to-many relationship
+  districts District[] 
 
   @@map("division")
 }
 
 model District {
   id   String @id @default(cuid())
-  name String @unique // e.g., "Faridpur", "Gazipur"
+  name String @unique
 
-  // Foreign key to Division
+
   divisionId String
   division   Division @relation(fields: [divisionId], references: [id], onDelete: Cascade)
 
-  @@index([divisionId]) // Speeds up queries when searching for districts by division
+  @@index([divisionId])
   @@map("district")
 }
 
@@ -108,6 +110,40 @@ model Issue {
   authorId String
   author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
+  upvotes  Upvote[]
+  downvotes DownVote[]
+
   @@index([authorId])
   @@map("issue")
+}
+
+model Upvote {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  issueId   String
+  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  
+  // CRITICAL: This ensures a user can only vote on a specific issue one time.
+  @@unique([userId, issueId]) 
+  
+  @@map("upvote")
+}
+
+model DownVote {
+  id String @id @default(cuid())
+  createAt DateTime @default(now())
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  issueId String
+  issue Issue @relation(fields: [issueId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, issueId])
+
+  @@map("downvote")
 }
