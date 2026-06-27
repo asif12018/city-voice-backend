@@ -11,6 +11,11 @@ enum Role {
   ADMIN
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
 model User {
   id            String    @id @default(uuid())
   email         String    @unique
@@ -20,9 +25,11 @@ model User {
   emailVerified Boolean   @default(false)
   image         String?
   role          Role      @default(USER)
-  gender        String
-  district      String
-  division      String
+  gender        Gender
+  districtId    String
+  district      District  @relation(fields: [districtId], references: [id], onDelete: Cascade)
+  divisionId    String
+  division      Division  @relation(fields: [divisionId], references: [id], onDelete: Cascade)
   isBanned      Boolean? @default(false)
   sessions      Session[]
   accounts      Account[]
@@ -87,7 +94,8 @@ model Division {
   id   String @id @default(cuid())
   name String @unique 
 
-  districts District[] 
+  districts District[]
+  user User[]
 
   @@map("division")
 }
@@ -95,11 +103,12 @@ model Division {
 model District {
   id   String @id @default(cuid())
   name String @unique
-
+  
 
   divisionId String
   division   Division @relation(fields: [divisionId], references: [id], onDelete: Cascade)
-
+   
+   user User[]
   @@index([divisionId])
   @@map("district")
 }
