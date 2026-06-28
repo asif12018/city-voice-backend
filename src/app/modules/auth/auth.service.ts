@@ -5,7 +5,7 @@ import ms from "ms";
 import { prisma } from "../../lib/prisma";
 import AppError from "../../../errors/AppError";
 import status from "http-status";
-import { auth } from "../../lib/auth";
+import { getAuth } from "../../lib/auth";
 import { tokenUtils } from "../../utils/token";
 import { JwtPayload } from "jsonwebtoken";
 import { jwtUtils } from "../../utils/jwt";
@@ -40,6 +40,7 @@ const registerUser = async (payload: IRegisterUser) => {
 
     //creating the user
 
+    const auth = await getAuth();
     const data = await auth.api.signUpEmail({
         body: payload
     })
@@ -87,6 +88,7 @@ const loginUser = async ( payload: ILoginUser) =>{
     const maxAgeOfAccessToken = ms(config.ACCESS_TOKEN_EXPIRES_IN as StringValue);
     const maxAgeOfRefreshToken = ms(config.REFRESH_TOKEN_EXPIRES_IN as StringValue);
 
+    const auth = await getAuth();
     const data = await auth.api.signInEmail({
         body:payload
     });

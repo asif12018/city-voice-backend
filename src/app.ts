@@ -4,8 +4,7 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import config from './app/config';
 import { IndexRoutes } from './app/routes';
-import { toNodeHandler } from "better-auth/node";
-import { auth } from './app/lib/auth';
+import { getAuth } from './app/lib/auth';
 import { notFount } from './app/middlewares/notFoundRoutes';
 import { globalErrorHandler } from './app/middlewares/globalErrorHandler';
 
@@ -38,7 +37,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1", IndexRoutes)
 
 // Better Auth handles everything else under /api/v1/auth (catch-all for auth)
-app.use("/api/v1/auth", toNodeHandler(auth));
+app.use("/api/v1/auth", async (req: Request, res: Response, next) => {
+  try {
+    const { toNodeHandler } = await import("better-auth/node");
+    const auth = await getAuth();
+    const handler = toNodeHandler(auth);
+    return handler(req, res);
+  } catch (err) {
+    next(err);
+  }
+});
 
 app.get('/', (req: Request, res: Response) => {
   res.send('City voice server is running!');

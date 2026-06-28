@@ -1,22 +1,21 @@
-import { betterAuth } from "better-auth";
-import { Pool } from "pg";
-import config from "../config";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
+import config from "../config";
 
+let authInstance: any = null;
 
-
-
-
-
-// better auth configuration
-export const auth = betterAuth({
-  baseURL: config.BETTER_AUTH_URL,
-  basePath:"/api/v1/auth",
-  secret: config.BETTER_AUTH_SECRET,
-  database: prismaAdapter(prisma,{
-    provider:"postgresql"
-  }),
+export const getAuth = async () => {
+  if (authInstance) return authInstance;
+  
+  const { betterAuth } = await import("better-auth");
+  
+  authInstance = betterAuth({
+    baseURL: config.BETTER_AUTH_URL,
+    basePath:"/api/v1/auth",
+    secret: config.BETTER_AUTH_SECRET,
+    database: prismaAdapter(prisma,{
+      provider:"postgresql"
+    }),
   emailAndPassword:{
     enabled: true,
     requireEmailVerification: false
@@ -79,3 +78,5 @@ export const auth = betterAuth({
     }
   }
 });
+  return authInstance;
+};
