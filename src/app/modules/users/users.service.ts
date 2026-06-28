@@ -8,6 +8,11 @@ const getMyDashboard = async (userId: string) => {
         include: {
             district: true,
             division: true,
+            issues: {
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            },
             _count: {
                 select: {
                     issues: true,

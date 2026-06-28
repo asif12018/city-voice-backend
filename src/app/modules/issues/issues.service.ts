@@ -53,6 +53,20 @@ const getIssuebyDivision = async (userId: string) => {
         where: {
             divisionId: userInfo.divisionId,
             districtId: userInfo.districtId
+        },
+        include: {
+            author: true,
+            district: true,
+            division: true,
+            _count: {
+                select: {
+                    upvotes: true,
+                    downvotes: true
+                }
+            }
+        },
+        orderBy: {
+            createdAt: 'desc'
         }
     });
 
@@ -61,7 +75,22 @@ const getIssuebyDivision = async (userId: string) => {
 
 
 const getGlobalIssues = async () => {
-    const result = await prisma.issue.findMany();
+    const result = await prisma.issue.findMany({
+        include: {
+            author: true,
+            district: true,
+            division: true,
+            _count: {
+                select: {
+                    upvotes: true,
+                    downvotes: true
+                }
+            }
+        },
+        orderBy: {
+            createdAt: 'desc'
+        }
+    });
     return result
 }
 
