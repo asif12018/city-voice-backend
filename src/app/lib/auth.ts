@@ -1,4 +1,3 @@
-import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 import config from "../config";
 
@@ -8,6 +7,7 @@ export const getAuth = async () => {
   if (authInstance) return authInstance;
   
   const { betterAuth } = await import("better-auth");
+  const { prismaAdapter } = await import("better-auth/adapters/prisma");
   
   authInstance = betterAuth({
     baseURL: config.BETTER_AUTH_URL,
