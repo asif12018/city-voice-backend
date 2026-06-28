@@ -10,7 +10,7 @@ const getLocations = async (req: Request, res: Response, next: NextFunction) => 
         const result = await LocationServices.getLocations();
         sendResponse(res, {
             success: true,
-            statusCode: status.OK,
+            httpStatusCode: status.OK,
             message: "Locations retrieved successfully",
             data: result
         });
