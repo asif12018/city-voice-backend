@@ -1,0 +1,5 @@
+# Exclude TypeScript source files so Vercel's @vercel/node builder
+# cannot compile them and create broken src/app.js files.
+# The pre-built api/index.js bundle handles all the code.
+src/**/*.ts
+api/_source.ts
