@@ -45,7 +45,11 @@ process.on("unhandledRejection", (error) => {
   shutdown("unhandledRejection", 1);
 });
 
-bootstrap().catch((err) => {
-  console.error("Unhandled bootstrap error:", err);
-  process.exit(1);
-});
+if (!process.env.VERCEL) {
+  bootstrap().catch((err) => {
+    console.error("Unhandled bootstrap error:", err);
+    process.exit(1);
+  });
+}
+
+export default app;
